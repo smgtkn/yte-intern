@@ -26,7 +26,7 @@ public class ManageEtkinlikService {
 	public EtkinlikRepository getEtkinlikRepository() {
 		return etkinlikRepository;
 	}
-
+  
 
 	public List<Etkinlik> listAllEtkinliks() {
 		return etkinlikRepository.findAll();
@@ -72,11 +72,18 @@ public class ManageEtkinlikService {
 		etkinlikFromDB.setName(etkinlik.getName());
 		etkinlikFromDB.setStart(etkinlik.getStart());
 		etkinlikFromDB.setEnd(etkinlik.getEnd());
+		etkinlikFromDB.setId(etkinlik.getId());
 	}
 
 	public void deleteEtkinlik(String name) {
 		etkinlikRepository.deleteByName(name);
 	}
+
+//
+//	public Optional<Etkinlik> getEtkinlikById(Long id) {
+//		// TODO Auto-generated method stub
+//		return etkinlikRepository.findById(id);
+//	}
 
 	/**
 	 * Burada bussiness rule'larımızı işletiyoruz. Eğer öğrencinin 5 kitabı varsa veya eklenmeye çalışılan kitap

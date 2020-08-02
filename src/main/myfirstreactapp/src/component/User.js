@@ -22,18 +22,21 @@ error3:false}
 		
 	}*/
 	onDeleteUser =async (dispatch,e)=>{
-	const{id,name}=this.props;
+	const{id,name,start,end}=this.props;
 	const{error3}=this.state;
+	
+
+	
 	//DElete request 
 	
 	if (this.checkError3()){
 	alert("Başlangıç tarihi geçmiş etkinliği silemezsiniz!");
 		return;
 	}
-	await axios.delete(`/delete/${name}`);
+	await axios.delete(`http://localhost:8080/delete/${name}`);
 //consumer Dispatch
    
-	dispatch({type: "DELETE_USER",payload:id})	;
+	dispatch({type: "DELETE_USER",payload:name});
 	}
 	
 	onClickEvent=(e)=>{
@@ -79,7 +82,7 @@ error3:false}
 		   {isVisible?<div className="card-body">
 			
 			<p className="card-text" > Etkinlik Adı: {name}</p><p className="card-text" > Başlangıç Tarihi: {start}</p><p className="card-text" > Bitiş Tarihi: {end}</p>
-		<Link to={`edit/${id}`} className="btn btn-dark btn-block" type="submit">GÜNCELLE</Link>
+		<Link to={`/guncelle`} className="btn btn-dark btn-block" type="submit">GÜNCELLE</Link>
 			</div>:null }
 			
 			
@@ -99,13 +102,13 @@ error3:false}
 	
 	
 }
-User.propTypes  = {
-	
-	name:PropTypes.string.isRequired,
-	start: PropTypes.string.isRequired,
-	end:PropTypes.string.isRequired,
-
-	
-}
+//User.propTypes  = {
+//	
+//	name:PropTypes.string.isRequired,
+//	start: PropTypes.string.isRequired,
+//	end:PropTypes.string.isRequired,
+//
+//	
+//}
 
 export default User;

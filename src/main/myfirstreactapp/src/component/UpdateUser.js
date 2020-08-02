@@ -22,16 +22,18 @@ import axios from "axios";
 		})
 	}
 	
-	componentDidMount=async()=>{
-		const {id}=this.props.match.params;
-		const response=await axios.get(`/etkinlik/${name}`)
-		
-		const{name,start,end}=response.data;
-		this.setState({
-			name,start,end
-		})
-		
-	}
+//	componentDidMount=async()=>{
+//	
+//		const {name}=this.props;
+//		console.log(name,this.id);
+//		const response=await axios.get(`http://localhost:8080/update/${name}`)
+//		
+//		const{start,end}=response.data;
+//		this.setState({
+//			name:response.data.name,start,end
+//		})
+//		
+//	}
 	
 	 MyFunction() {
   let tempDate = new Date();
@@ -80,6 +82,7 @@ updateUser=async (dispatch,e) => {
 	e.preventDefault();
 	const {name,start,end}=this.state;
 	const {id}=this.props.match.params;
+
 	const updatedUser={
 		name,end,start
 	};
@@ -94,7 +97,7 @@ updateUser=async (dispatch,e) => {
 	}
 	
 	else this.setState({error:false})
-	const response=await axios.put(`/update`,updatedUser);
+	const response=await axios.put(`http://localhost:8080/update/${name}`,updatedUser);
 	dispatch({type:"UPDATE_USER",payload:response.data});
 	//this.props.history.push("/");
 }

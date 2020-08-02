@@ -3,7 +3,7 @@ package yte.intern.application;
 
 import java.util.List;
 
-
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,19 +28,25 @@ import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins="http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
+
 public class IndexController {
   
-	private  EtkinlikRepository etkinlikRepository;
+	private final  EtkinlikRepository etkinlikRepository;
 
-    private  ManageEtkinlikService manageEtkinlikService;
-
-	private  EtkinlikMapper etkinlikMapper;
+    private  final ManageEtkinlikService manageEtkinlikService;
+    
+	private final EtkinlikMapper etkinlikMapper;
 	
+
+
+public IndexController(EtkinlikRepository etkinlikRepository, ManageEtkinlikService manageEtkinlikService,EtkinlikMapper etkinlikMapper
+			) {
+		this.etkinlikRepository = etkinlikRepository;
+		this.manageEtkinlikService = manageEtkinlikService;
+		this.etkinlikMapper=etkinlikMapper;
 	
-
-
-//
+	}
+	//
 //
 //public IndexController() {
 //		super();
@@ -88,12 +94,13 @@ public class IndexController {
 //		return "/users";
 //	}
 	@CrossOrigin(origins="https://localhost:3000")
-	@GetMapping
+	@GetMapping("/users")
 	public List<EtkinlikDTO> listAllEtkinliks() {
+		
 		List<Etkinlik> etkinlik = manageEtkinlikService.listAllEtkinliks();
 		return etkinlikMapper.mapToDto(etkinlik);
 	}@CrossOrigin(origins="http://localhost:3000")
-	 @GetMapping("/etkinlik/{name}")
+	 @GetMapping("/update/{name}")
 		public EtkinlikDTO getEtkinlikById(@PathVariable  String name ) {
 			Etkinlik etkinlik = manageEtkinlikService.getEtkinlikByName(name);
 			return etkinlikMapper.mapToDto(etkinlik);
@@ -105,11 +112,12 @@ public class IndexController {
 //		 return new Etkinlik("simge",LocalDateTime.parse(),LocalDateTime.parse());
 //		 
 //	 }
+
 	@CrossOrigin(origins="http://localhost:3000")
-		@PutMapping("/update")
-		public EtkinlikDTO updateStudent(@RequestBody EtkinlikDTO etkinlikDTO) {
-			Etkinlik etkinlik = etkinlikMapper.mapToEntity(etkinlikDTO);
-			Etkinlik updatedEtkinlik = manageEtkinlikService.updateEtkinlik(etkinlikDTO.getName(),etkinlik);
+		@PutMapping("/update/{name}")
+		public EtkinlikDTO updateStudent(@PathVariable String name ,@RequestBody EtkinlikDTO etkinlikDTO) {
+			Etkinlik etkinlik = etkinlikMapper.mapToEntity1(etkinlikDTO);
+			Etkinlik updatedEtkinlik = manageEtkinlikService.updateEtkinlik(name,etkinlik);
 			return etkinlikMapper.mapToDto(updatedEtkinlik);
 		}
 
@@ -121,18 +129,20 @@ public class IndexController {
 //
 //		 return people;
 	//	 }
-//@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="http://localhost:3000")
 	 @PostMapping("/addEtkinlik")
-		public String addEtkinlik(@RequestBody EtkinlikDTO etkinlikDTO) {
-			//Etkinlik etkinlik = etkinlikMapper.mapToEntity(etkinlikDTO);
-			//Etkinlik addedEtkinlik = manageEtkinlikService.addEtkinlik(etkinlik);
-			//return etkinlikMapper.mapToDto(addedEtkinlik);
-			return "Hey";
+		public  EtkinlikDTO addEtkinlik(@RequestBody EtkinlikDTO etkinlikDTO) {
+			Etkinlik etkinlik = etkinlikMapper.mapToEntity(etkinlikDTO);
+			Etkinlik addedEtkinlik = manageEtkinlikService.addEtkinlik(etkinlik);
+			return etkinlikMapper.mapToDto(addedEtkinlik);
+			
 		}
+@Transactional
 	@CrossOrigin(origins="http://localhost:3000")
 		@DeleteMapping("/delete/{name}")
 		public void deleteEtkinlik(@PathVariable String name) {
 			manageEtkinlikService.deleteEtkinlik(name);
+			
 		}
 //	 @PostMapping ("/addWebPeople")
 //	 @ResponseBody
