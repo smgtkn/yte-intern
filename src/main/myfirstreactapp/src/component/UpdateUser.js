@@ -14,6 +14,7 @@ import axios from "axios";
 
 	}
 	
+	
 	changeInput =(e)=>{
 
 		this.setState({
@@ -68,7 +69,7 @@ import axios from "axios";
 		let gun1=parseInt(start.slice(0,2));
 		
 		let gun2=parseInt(end.slice(0,2));
-		if( yil1>yil2||(yil1===yil2 && ay1>ay2 )|| (yil1===yil2 && ay1===ay2 && gun1>gun2) ){
+		if( yil1>yil2||(yil1===yil2 && ay1>ay2 )|| (yil1===yil2 && ay1===ay2 && gun1>gun2 )|| (name===""||name===" "|| name.length<=1 )){
 			
 			return false;
 		}
@@ -97,32 +98,32 @@ updateUser=async (dispatch,e) => {
 	}
 	
 	else this.setState({error:false})
-	const response=await axios.put(`http://localhost:8080/update/${name}`,updatedUser);
-	dispatch({type:"UPDATE_USER",payload:response.data});
+	const response=await axios.post(`http://localhost:8080/update/etkinlik`,updatedUser);
+	dispatch({type:"ADD_USER",payload:response.data});
 	//this.props.history.push("/");
 }
 
 	render (){
 		
 		const {error2,error,name,start,end}=this.state;
-		return <UserConsumer>{value=>{const {dispatch}=value;return(
+		return <UserConsumer key={12}>{value=>{const {dispatch}=value;return(
 			<div className="col-md-8 mb-4">
 			
 			    
-                 <div className="card" style={{backgroundColor:"#968A8A"}}>
+                 <div key="12" className="card" style={{backgroundColor:"#968A8A"}}>
                  <div className="card-header"> 
                     <h4>Etkinlik Güncelleme Formu</h4>
                 </div>
                 <div className="card-body">
 {
 error===true?<div className="alert alert-danger">
-	Başlangıç tarihi geçmiş etkinliği güncelleyemezsiniz.
+	Başlangıç tarihi geçmiş etkinliği güncelleyemezsiniz.Etkinlik adı 255 karakterden uzun ya da boşluk olamaz.
 	</div> :(error===false?<div className="alert alert-success alert-dismissible fade show">İşlem başarıyla tamamlandı </div> :null)
 
 }
 {
 	error2?<div className="alert alert-danger">
-	Başlangıç tarihi geçmiş etkinliği güncelleyemezsiniz.
+	Başlangıç tarihi geçmiş etkinlik ekleyemezsiniz.
 	</div>:null
 	
 }

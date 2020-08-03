@@ -8,11 +8,14 @@ class User extends Component {
 		name:"bilgi yok",
 		start: "bilgi yok",
 		end:"bilgi yok",
-		id:""
+		id:"",
 		
+	
+
+
 }	
 state= {isVisible:false,
-error3:false}
+error3:false,link:`/guncelle`}
 	/*constructor (props) {
 		super(props);
 		this.state= {
@@ -21,9 +24,37 @@ error3:false}
 		}
 		
 	}*/
+		onUpdateUser =async (dispatch,e)=>{
+	const{name,start,end}=this.props;
+
+
+	
+	//DElete request 
+	
+	if (this.checkError3()){
+	alert("Başlangıç tarihi geçmiş etkinliği güncelleyemezsiniz! Yaptığınız güncelleme yeni bir etkinlik olarak eklenecektir.");
+	this.setState({link:`/`});
+		return;
+	}
+	await axios.delete(`http://localhost:8080/delete/${name}?start=${start}&end=${end}`);
+//consumer Dispatch
+   
+	dispatch({type: "DELETE_USER",payload:[name,start,end]});
+	
+	}
+	
+	Link=()=> {
+	if(	this.checkError3()){
+		
+		this.setState({link:`/`})
+	}
+		
+		this.setState({link:`/guncelle`})
+	}
+	
 	onDeleteUser =async (dispatch,e)=>{
 	const{id,name,start,end}=this.props;
-	const{error3}=this.state;
+
 	
 
 	
@@ -31,12 +62,14 @@ error3:false}
 	
 	if (this.checkError3()){
 	alert("Başlangıç tarihi geçmiş etkinliği silemezsiniz!");
+
 		return;
 	}
-	await axios.delete(`http://localhost:8080/delete/${name}`);
+	await axios.delete(`http://localhost:8080/delete/${name}?start=${start}&end=${end}`);
 //consumer Dispatch
    
-	dispatch({type: "DELETE_USER",payload:name});
+	dispatch({type: "DELETE_USER",payload:[name,start,end]})
+			
 	}
 	
 	onClickEvent=(e)=>{
@@ -60,14 +93,17 @@ error3:false}
 		//this.props.özellik yerine sadece özelliği yazmamızı sağlar
 	
         	
+			
 		const {name,start,end,id}=this.props;
 		const {isVisible,error3}=this.state;
 		return (
-			<UserConsumer >{
+			
+			
+				<UserConsumer  >{
 				value => {
 					const {dispatch}=value;
 						return (
-			<div>
+			<div >
 			<div className="col-md-8 mb-4">
 			<div className="card"  style={isVisible?{backgroundColor:"#968A8A"}:null}>
 			<div className="card-header d-flex justify-content-between">
@@ -82,7 +118,10 @@ error3:false}
 		   {isVisible?<div className="card-body">
 			
 			<p className="card-text" > Etkinlik Adı: {name}</p><p className="card-text" > Başlangıç Tarihi: {start}</p><p className="card-text" > Bitiş Tarihi: {end}</p>
-		<Link to={`/guncelle`} className="btn btn-dark btn-block" type="submit">GÜNCELLE</Link>
+			<Link to={`/guncelle`} onClick={this.onUpdateUser.bind(this,dispatch)}  className="btn btn-dark btn-block" type="submit">GÜNCELLE</Link>
+			
+			
+		
 			</div>:null }
 			
 			

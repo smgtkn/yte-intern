@@ -1,24 +1,41 @@
 package yte.intern.application;
-
+ 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 
 
 @Getter
 @Builder
 public class EtkinlikDTO {
 
-	
+	@Size(max=255,min=1,message="Etkinlik adı 255 karakterden fazla ya da boşluk olamaz!")
+	@NotBlank
 	public final String name;
 
-
+    
 	public final String start;
 
 	public final String end;
-
+	@AssertTrue
+	public boolean isTarihlerValid() {
+	//	yil1> yil2||(yil1===yil2 && ay1>ay2 )|| (yil1===yil2 && ay1===ay2 && gun1>gun2) || (name===""||name===" "|| name.length<=1 || name.length>=255
+		return ((Integer.parseInt(this.start.substring(6,10))<Integer.parseInt(this.end.substring(6,10)))|| (Integer.parseInt(this.start.substring(6,10))==Integer.parseInt(this.end.substring(6,10))&& Integer.parseInt(this.start.substring(3,5))<(Integer.parseInt(this.end.substring(3,5))))
+				
+				|| (Integer.parseInt(this.start.substring(6,10))==Integer.parseInt(this.end.substring(6,10))&& Integer.parseInt(this.start.substring(3,5))==(Integer.parseInt(this.end.substring(3,5)))&&Integer.parseInt(this.start.substring(0,2))<=Integer.parseInt(this.end.substring(0,2)))
+				
+				);
+	}
+	
 
 	/** StudentDTO ve BookDTO derste yaptığımızdan biraz farklı. Bunu sebebi DTO objelerinde immutability'yi sağlamaya
 	 * çalışmamdan kaynaklı. Farkettiyseniz tüm field'lar public ve final, ve sadece @Getter var. Bunun sebebi bir
@@ -39,7 +56,10 @@ public class EtkinlikDTO {
 	@JsonCreator
 	public EtkinlikDTO(@JsonProperty("name") String name,
 					  @JsonProperty("start") String start,
-					  @JsonProperty("end") String end) {
+	                   @JsonProperty("end") String end) {
+	
+	
+		
 		this.name = name;
 		this.start = start;
 		this.end = end;

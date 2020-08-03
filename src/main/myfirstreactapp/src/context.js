@@ -4,12 +4,14 @@ const UserContext=React.createContext();
 
 //provider,consumer verir
 const reducer = (state,action) => {
+	//console.log(action.payload[0]);
 	switch(action.type) {
 		
 		case "DELETE_USER": 
 		   return { 
 			...state,
-			users: state.users.filter(user => action.payload!== user.name)
+			users: state.users.filter(user => (action.payload[0]!== user.name||action.payload[1]!==user.start||action.payload[2]!==user.end))
+	
 		}
 		case "ADD_USER":
 		return {...state,
@@ -18,6 +20,7 @@ const reducer = (state,action) => {
 		return {
 			...state,
 			users:state.users.map(user=>user.name===action.payload.name?action.payload:user)
+			
 		}
 		default :
 		return state;
@@ -49,7 +52,7 @@ export class UserProvider extends Component {
 	}
 	render() {
 		
-		return (<UserContext.Provider value={this.state}>{this.props.children}</UserContext.Provider>)}}
+		return (<UserContext.Provider value={this.state} >{this.props.children}</UserContext.Provider>)}}
 
 const UserConsumer=UserContext.Consumer;
 

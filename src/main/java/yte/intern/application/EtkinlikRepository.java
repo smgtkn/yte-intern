@@ -15,6 +15,10 @@ void deleteByName(String name);
 
 
 
+void deleteByNameAndStartAndEnd(String name, String start, String end);
+
+
+
 //Optional<Etkinlik> findById(Long id); 
 
 }

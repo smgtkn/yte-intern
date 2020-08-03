@@ -75,8 +75,8 @@ public class ManageEtkinlikService {
 		etkinlikFromDB.setId(etkinlik.getId());
 	}
 
-	public void deleteEtkinlik(String name) {
-		etkinlikRepository.deleteByName(name);
+	public void deleteEtkinlik(String name,String start,String end) {
+		etkinlikRepository.deleteByNameAndStartAndEnd(name,start,end);
 	}
 
 //

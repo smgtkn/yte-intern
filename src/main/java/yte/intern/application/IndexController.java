@@ -4,6 +4,7 @@ package yte.intern.application;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -112,13 +113,13 @@ public IndexController(EtkinlikRepository etkinlikRepository, ManageEtkinlikServ
 //		 return new Etkinlik("simge",LocalDateTime.parse(),LocalDateTime.parse());
 //		 
 //	 }
-
+    @Transactional
 	@CrossOrigin(origins="http://localhost:3000")
-		@PutMapping("/update/{name}")
-		public EtkinlikDTO updateStudent(@PathVariable String name ,@RequestBody EtkinlikDTO etkinlikDTO) {
-			Etkinlik etkinlik = etkinlikMapper.mapToEntity1(etkinlikDTO);
-			Etkinlik updatedEtkinlik = manageEtkinlikService.updateEtkinlik(name,etkinlik);
-			return etkinlikMapper.mapToDto(updatedEtkinlik);
+		@PostMapping("/update/etkinlik")
+	public  EtkinlikDTO updateEtkinlik(@Valid @RequestBody EtkinlikDTO etkinlikDTO) {
+		Etkinlik etkinlik = etkinlikMapper.mapToEntity(etkinlikDTO);
+		Etkinlik addedEtkinlik = manageEtkinlikService.addEtkinlik(etkinlik);
+		return etkinlikMapper.mapToDto(addedEtkinlik);
 		}
 
 	
@@ -131,7 +132,7 @@ public IndexController(EtkinlikRepository etkinlikRepository, ManageEtkinlikServ
 	//	 }
 @CrossOrigin(origins="http://localhost:3000")
 	 @PostMapping("/addEtkinlik")
-		public  EtkinlikDTO addEtkinlik(@RequestBody EtkinlikDTO etkinlikDTO) {
+		public  EtkinlikDTO addEtkinlik(@Valid @RequestBody EtkinlikDTO etkinlikDTO) {
 			Etkinlik etkinlik = etkinlikMapper.mapToEntity(etkinlikDTO);
 			Etkinlik addedEtkinlik = manageEtkinlikService.addEtkinlik(etkinlik);
 			return etkinlikMapper.mapToDto(addedEtkinlik);
@@ -140,8 +141,9 @@ public IndexController(EtkinlikRepository etkinlikRepository, ManageEtkinlikServ
 @Transactional
 	@CrossOrigin(origins="http://localhost:3000")
 		@DeleteMapping("/delete/{name}")
-		public void deleteEtkinlik(@PathVariable String name) {
-			manageEtkinlikService.deleteEtkinlik(name);
+		public void deleteEtkinlik(@PathVariable String name,@RequestParam String start,@RequestParam String end) {
+			manageEtkinlikService.deleteEtkinlik(name,start,end);
+			//System.out.println(name+start+end);
 			
 		}
 //	 @PostMapping ("/addWebPeople")

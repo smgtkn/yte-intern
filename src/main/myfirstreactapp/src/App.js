@@ -29,7 +29,7 @@ function App (){
    <Navbar title="Etkinlikleri Yönet"></Navbar>
     <hr/>
 <Switch>
-    <Route exact path ="/" component={Users}/>
+    <Route  exact path ="/" component={Users}/>
   <Route exact path="/guncelle" component={UpdateUser}/>
   <Route exact path ="/ekle" component={AddUser}/>
   <Route component={NotFound} />

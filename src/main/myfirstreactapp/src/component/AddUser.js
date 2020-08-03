@@ -26,6 +26,7 @@ class AddUser extends Component {
 		start:"",
 		end:"",
 		error:""}
+	
 	changeVisibility =(e) => {
 		this.setState({
 			visible : !this.state.visible
@@ -33,6 +34,7 @@ class AddUser extends Component {
 		})
 		
 	}
+	
 	validateForm=()=> {
 		const {name,end,start}=this.state
 		let yil1=parseInt(start.slice(6,10));
@@ -43,8 +45,8 @@ class AddUser extends Component {
 		let gun1=parseInt(start.slice(0,2));
 		
 		let gun2=parseInt(end.slice(0,2));
-		if( yil1> yil2||(yil1===yil2 && ay1>ay2 )|| (yil1===yil2 && ay1===ay2 && gun1>gun2) ){
-			
+		if( yil1> yil2||(yil1===yil2 && ay1>ay2 )|| (yil1===yil2 && ay1===ay2 && gun1>gun2) || (name===""||name===" "|| name.length<=1 || name.length>=255 )){
+		
 			return false;
 		}
 		
@@ -96,8 +98,8 @@ addUser=async (dispatch,e) => {
 	render (){
 		
 		const {error,name,end,start,visible}=this.state;
-		return <UserConsumer>{value=>{const {dispatch}=value;return(
-			<div className="col-md-8 mb-4">
+		return <UserConsumer >{value=>{const {dispatch}=value;return(
+			<div key="12" className="col-md-8 mb-4">
 			<button onClick={this.changeVisibility} className="btn btn-dark btn-block mb-2">{visible ?"Formu Gizle":"Formu Göster"} </button>
 			    <Animation pose={visible?"visible":"hidden"}>
                  <div className="card" style={{backgroundColor:"#968A8A"}}>
@@ -108,7 +110,7 @@ addUser=async (dispatch,e) => {
                 <div className="card-body">
 {
 	error===true?<div className="alert alert-danger">
-	Lütfen tarihleri kontrol ediniz.
+	Lütfen tarihleri ve etkinlik adını kontrol ediniz.(Etkinlik adı boş bırakılamaz ya da 255 karakterden uzun olamaz.)
 	</div>:(error===false?<div className="alert alert-success alert-dismissible fade show">İşlem başarıyla tamamlandı </div> :null)
 	
 }
